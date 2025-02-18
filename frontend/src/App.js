@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, Button, Input, VStack, Text, Flex, Heading } from "@chakra-ui/react";
+import { Box, Button, Input, VStack, Text } from "@chakra-ui/react";
 import { io } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
 
@@ -79,63 +79,31 @@ const App = () => {
   };
 
   return (
-    <Box h="100vh" w="100vw" bg="gray.900" color="white">
+    <VStack spacing={4} p={8}>
       {!joined ? (
-        <Flex direction="column" align="center" justify="center" h="100%">
-          <VStack spacing={6} p={8} bg="gray.800" borderRadius="lg" boxShadow="lg">
-            <Heading size="lg" color="teal.400">Video Call App</Heading>
-            <Button onClick={startMeeting} colorScheme="teal" w="full">
-              Create Meeting
-            </Button>
-            <Input
-              placeholder="Enter Meeting ID"
-              value={meetingId}
-              onChange={(e) => setMeetingId(e.target.value)}
-              textAlign="center"
-              borderColor="gray.600"
-              focusBorderColor="teal.400"
-              bg="gray.700"
-              color="white"
-            />
-            <Button onClick={() => joinMeeting(meetingId)} colorScheme="blue" w="full">
-              Join Meeting
-            </Button>
-          </VStack>
-        </Flex>
+        <>
+          <Button onClick={startMeeting} colorScheme="teal">
+            Create Meeting
+          </Button>
+          <Input
+            placeholder="Enter Meeting ID"
+            value={meetingId}
+            onChange={(e) => setMeetingId(e.target.value)}
+          />
+          <Button onClick={() => joinMeeting(meetingId)} colorScheme="blue">
+            Join Meeting
+          </Button>
+        </>
       ) : (
-        <Flex direction="column" w="100%" h="100%">
-          {/* Meeting ID Display */}
-          <Box textAlign="center" py={3} bg="gray.800" color="teal.300" fontSize="lg" fontWeight="bold">
-            Meeting ID: {meetingId}
+        <>
+          <Text fontSize="lg">Meeting ID: {meetingId}</Text>
+          <Box>
+            <video ref={videoRef} autoPlay muted playsInline style={{ width: "300px", border: "2px solid teal" }} />
+            <video ref={peerVideoRef} autoPlay playsInline style={{ width: "300px", border: "2px solid blue" }} />
           </Box>
-          
-          {/* Video Call Area */}
-          <Flex w="100%" h="100%">
-            <Box
-              w="50%"
-              h="100%"
-              bg="black"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              borderRight="2px solid gray"
-            >
-              <video ref={videoRef} autoPlay muted playsInline style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            </Box>
-            <Box
-              w="50%"
-              h="100%"
-              bg="black"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <video ref={peerVideoRef} autoPlay playsInline style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            </Box>
-          </Flex>
-        </Flex>
+        </>
       )}
-    </Box>
+    </VStack>
   );
 };
 
